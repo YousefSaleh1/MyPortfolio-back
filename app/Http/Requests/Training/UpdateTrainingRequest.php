@@ -22,7 +22,13 @@ class UpdateTrainingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
-        ];
+            'training_name'=>'required',
+            'company_name'=>'required',
+            'description'=>'required',
+             'company_logo'=>'required',
+            'company_link'=>'required',
+            'certificate_link'=>'required',
+            'recomendation_letter_link'=>'required',  
+              ];
     }
 }
