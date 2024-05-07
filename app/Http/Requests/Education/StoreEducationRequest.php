@@ -22,7 +22,9 @@ class StoreEducationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'nullable|required|string|max:255',
+            'description' => 'nullable|required|string|max:1000',
+            'photo' => 'nullable|required|image|max:2048', 
         ];
     }
 }
