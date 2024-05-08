@@ -1,13 +1,15 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\Project\StoreContactRequest;
+use App\Http\Requests\Project\UpdateContactRequest;
 use App\Models\Contact;
 use Illuminate\Http\Request;;
 use App\Http\Resources\ContactResource;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Traits\UploadFileTrait;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ContactController extends Controller
 {
@@ -25,13 +27,23 @@ class ContactController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreContactRequest $request)
     {
         try {
-            //code...
+            DB::beginTransaction();
+    
+            $contact = Contact::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'subject' => $request->subject,
+                'message' => $request->message,
+            ]);
+    
+            return $this->customeResponse(new ContactResource($contact), ' Successful', 201);
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error($th);
-            return $this->customeResponse(null, 'Failed To Create', 500);
+            return $this->customeResponse(null, 'Failed ', 500);
         }
     }
 
@@ -47,11 +59,23 @@ class ContactController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Contact $contact)
+    public function update(UpdateContactRequest $request, Contact $contact)
     {
         try {
-            //code...
+            DB::beginTransaction();
+
+            $contact->update([
+                'name' => $request->name,
+                'email' => $request->email,
+                'subject' => $request->subject,
+                'message' => $request->message,
+            ]);
+
+            DB::commit();
+
+            return $this->customeResponse(new ContactResource($contact), ' Updated Successfully', 200);
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error($th);
             return response()->json(['message' => 'Something Error !'], 500);
         }
