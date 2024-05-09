@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Stringable;
 use App\Models\Training;
-use Illuminate\Http\Request;;
-use App\Http\Resources\TrainingResource;
-use App\Http\Traits\ApiResponseTrait;
-use App\Http\Traits\UploadFileTrait;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\Http\Traits\UploadFileTrait;
+use App\Http\Traits\ApiResponseTrait;
+use Illuminate\Support\Facades\Storage;
+use App\Http\Resources\TrainingResource;
+use App\Http\Requests\Training\StoreTrainingRequest;
+use App\Http\Requests\Training\UpdateTrainingRequest;
 
 class TrainingController extends Controller
 {
@@ -22,18 +26,43 @@ class TrainingController extends Controller
         return $this->customeResponse($data, 'Done!', 200);
     }
 
+
+
+    public function store(StoreTrainingRequest $request)
+    {
+        try {
+            DB::beginTransaction();
+
+            $trainings = Training::create([
+                'training_name' => $request->training_name,
+                'company_name' => $request->company_name,
+                'description' => $request->description,
+                'company_link' => $request->company_link,
+                'certificate_link' => $request->certificate_link,
+                'company_logo' => $request->company_logo,
+                'recomendation_letter_link' => $request->recomendation_letter_link,
+            ]);
+
+            // $this->UploadFile($request,'training','company_logo','image');
+
+            DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'training' => $trainings,
+            ]);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th);
+            return response()->json([
+                'status' => 'error',
+            ], 500);
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        try {
-            //code...
-        } catch (\Throwable $th) {
-            Log::error($th);
-            return $this->customeResponse(null, 'Failed To Create', 500);
-        }
-    }
+
 
     /**
      * Display the specified resource.
@@ -47,13 +76,39 @@ class TrainingController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Training $training)
+    public function update(UpdateTrainingRequest $request, Training $training)
     {
         try {
-            //code...
+
+            DB::beginTransaction();
+            $training->update([
+                'training_name' => $request->training_name,
+                'company_name' => $request->company_name,
+                'description' => $request->description,
+                'company_link' => $request->company_link,
+                'certificate_link' => $request->certificate_link,
+                'company_logo' => $request->company_logo,
+                'recomendation_letter_link' => $request->recomendation_letter_link,
+            ]);
+
+            /*if ($request->hasFile('company_logo')) {
+                if ($training->company_logo) {
+                    Storage::delete($training->company_logo);
+                }
+                $path = $request->file('company_logo')->store('image', 'public');
+                $training->update(['company_logo' => $path]);
+            }
+            DB::commit();
+            return response()->json([
+                'status' => 'success',
+                'training' => $training,
+            ]);*/
         } catch (\Throwable $th) {
+            DB::rollBack();
             Log::error($th);
-            return response()->json(['message' => 'Something Error !'], 500);
+            return response()->json([
+                'status' => 'error',
+            ], 500);
         }
     }
 
