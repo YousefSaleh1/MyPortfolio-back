@@ -29,4 +29,13 @@ class HeroSlider extends Model
     {
         return $this->belongsTo(Hero::class, 'hero_id');
     }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::creating(function ($heroSlider) {
+            $heroSlider->hero_id = 1;
+        });
+    }
 }

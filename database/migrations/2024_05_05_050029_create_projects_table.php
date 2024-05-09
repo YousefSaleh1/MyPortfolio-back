@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->string('github_link')->nullable();
             $table->string('demo_link')->nullable();
-            $table->date('date');
+            $table->date('published');
             $table->timestamps();
         });
     }

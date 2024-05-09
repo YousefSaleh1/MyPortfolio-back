@@ -21,7 +21,7 @@ class Project extends Model
         'description',
         'github_link',
         'demo_link',
-        'date',
+        'published',
     ];
 
     /**
