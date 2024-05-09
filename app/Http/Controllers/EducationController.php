@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Education;
 use Illuminate\Http\Request;;
+
 use App\Http\Resources\EducationResource;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Traits\UploadFileTrait;
@@ -29,6 +30,15 @@ class EducationController extends Controller
     {
         try {
             //code...
+            $education = new Education();
+            $education->title = $request->title;
+            $education->description = $request->description;
+            $education->photo = $request->photo;
+
+            $education->save();
+
+            $data = new EducationResource($education);
+            return $this->customeResponse($data, 'Education Created Successfully', 201);
         } catch (\Throwable $th) {
             Log::error($th);
             return $this->customeResponse(null, 'Failed To Create', 500);
@@ -51,6 +61,14 @@ class EducationController extends Controller
     {
         try {
             //code...
+            $education->title = $request->title;
+            $education->description = $request->description;
+            $education->photo = $request->photo;
+            
+            $education->save();
+
+            $data = new EducationResource($education);
+            return $this->customeResponse($data, 'Education Updated Successfully', 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['message' => 'Something Error !'], 500);
