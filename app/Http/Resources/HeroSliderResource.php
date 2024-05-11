@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\Storage;
 
-class HeroResource extends JsonResource
+class HeroSliderResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,10 +16,8 @@ class HeroResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id'           => $this->id,
-            'title'        => $this->title,
-            'my_cv'        => Storage::url($this->my_cv),
-            'hero_sliders' => HeroSliderResource::collection($this->hero_sliders),
+            'id'          => $this->id,
+            'photo_slide' => Storage::url($this->photo_slide),
         ];
     }
 }

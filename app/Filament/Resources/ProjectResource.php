@@ -44,7 +44,6 @@ class ProjectResource extends Resource
                 ->required()
                 ->url(),
             TextInput::make('demo_link')
-                ->required()
                 ->url(),
             DatePicker::make('published')
                 ->required()
@@ -123,5 +122,5 @@ class ProjectResource extends Resource
         ];
     }
 
-    
+
 }

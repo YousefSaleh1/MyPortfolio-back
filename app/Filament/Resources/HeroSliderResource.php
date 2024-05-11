@@ -7,6 +7,7 @@ use App\Filament\Resources\HeroSliderResource\RelationManagers;
 use App\Models\HeroSlider;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -40,6 +41,9 @@ class HeroSliderResource extends Resource
                     ->openable()
                     ->downloadable()
                     ->required(),
+                TextInput::make('photo_title')
+                    ->required()
+                    ->maxLength(255),
             ]);
     }
 
@@ -47,6 +51,7 @@ class HeroSliderResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('photo_title'),
                 Tables\Columns\ImageColumn::make('photo_slide'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()

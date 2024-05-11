@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('hero_id')->constrained('heroes')->cascadeOnDelete();
             $table->string('photo_slide');
+            $table->string('photo_title');
             $table->timestamps();
         });
     }

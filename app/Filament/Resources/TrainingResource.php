@@ -58,7 +58,6 @@ class TrainingResource extends Resource
                 ->required()
                 ->url(),
             TextInput::make('recomendation_letter_link')
-                ->required()
                 ->url(),
         ]);
     }

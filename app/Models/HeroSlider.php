@@ -17,7 +17,8 @@ class HeroSlider extends Model
      */
     protected $fillable = [
         'hero_id',
-        'photo_slide'
+        'photo_slide',
+        'photo_title'
     ];
 
     /**

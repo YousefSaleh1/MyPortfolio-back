@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\Project\StoreProjectRequest;
 use App\Http\Requests\Project\UpdateProjectRequest;
+use App\Http\Resources\ProjectPhotoResource;
 use App\Models\Project;
 use Illuminate\Http\Request;;
 
@@ -22,7 +23,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::with('project_photos')->get();
+        $projects = Project::all();
         $data = ProjectResource::collection($projects);
         return $this->customeResponse($data, 'Projects Retrieved Successfully', 200);
     }
@@ -31,45 +32,42 @@ class ProjectController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreProjectRequest $request)
-{
-    try {
-        DB::beginTransaction();
+    {
+        try {
+            DB::beginTransaction();
 
-        $project = Project::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'github_link' => $request->github_link,
-            'demo_link' => $request->demo_link,
-            'date' => $request->date,
-        ]);
+            $project = Project::create([
+                'title' => $request->title,
+                'description' => $request->description,
+                'github_link' => $request->github_link,
+                'demo_link' => $request->demo_link,
+                'date' => $request->date,
+            ]);
 
-        $path = $this->UploadFile($request, 'projects', 'photo', 'public');
-        $projectPhoto = new ProjectPhoto([
-            'project_id' => $project->id,
-            'photo' => $path,
-        ]);
-        $projectPhoto->save();
+            $path = $this->UploadFile($request, 'projects', 'photo', 'public');
+            $projectPhoto = new ProjectPhoto([
+                'project_id' => $project->id,
+                'photo' => $path,
+            ]);
+            $projectPhoto->save();
 
-        DB::commit();
+            DB::commit();
 
-        return $this->customeResponse(new ProjectResource($project), 'Project Created Successfully', 201);
-    } catch (\Throwable $th) {
-        DB::rollBack();
-        Log::error($th);
-        return $this->customeResponse(null, 'Failed To Create Project', 500);
+            return $this->customeResponse(new ProjectResource($project), 'Project Created Successfully', 201);
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::error($th);
+            return $this->customeResponse(null, 'Failed To Create Project', 500);
+        }
     }
-}
-
-
-
-
 
     /**
      * Display the specified resource.
      */
     public function show(Project $project)
     {
-        $data = new ProjectResource($project);
+        $data['project'] = new ProjectResource($project);
+        $data['photos'] = ProjectPhotoResource::collection($project->project_photos);
         return $this->customeResponse($data, 'Done!', 200);
     }
 
@@ -115,6 +113,6 @@ class ProjectController extends Controller
     public function destroy(Project $project)
     {
         $project->delete();
-            return $this->customeResponse(null, 'project deleted successfully', 200);
+        return $this->customeResponse(null, 'project deleted successfully', 200);
     }
 }
