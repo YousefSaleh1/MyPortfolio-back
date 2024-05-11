@@ -19,7 +19,7 @@ class EducationResource extends JsonResource
             'id'          => $this->id,
             'title'       => $this->title,
             'description' => $this->description,
-            'photo'       => Storage::url($this->photo),
+            'photo'       => asset(Storage::url($this->photo)),
         ];
     }
 }

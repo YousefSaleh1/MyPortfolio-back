@@ -20,7 +20,7 @@ class TrainingResource extends JsonResource
             'training_name'             => $this->training_name,
             'company_name'              => $this->company_name,
             'description'               => $this->description,
-            'company_logo'              => Storage::url($this->company_logo),
+            'company_logo'              => asset(Storage::url($this->company_logo)),
             'company_link'              => $this->company_link,
             'certificate_link'          => $this->certificate_link,
             'recomendation_letter_link' => $this->recomendation_letter_link,

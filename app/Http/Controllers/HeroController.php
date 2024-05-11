@@ -17,8 +17,9 @@ class HeroController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Hero $hero)
+    public function show()
     {
+        $hero = Hero::first();
         $data = new HeroResource($hero);
         return $this->customeResponse($data, 'Done!', 200);
     }

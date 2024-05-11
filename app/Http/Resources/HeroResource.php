@@ -18,7 +18,7 @@ class HeroResource extends JsonResource
         return [
             'id'           => $this->id,
             'title'        => $this->title,
-            'my_cv'        => Storage::url($this->my_cv),
+            'my_cv'        => asset(Storage::url($this->my_cv)),
             'hero_sliders' => HeroSliderResource::collection($this->hero_sliders),
         ];
     }

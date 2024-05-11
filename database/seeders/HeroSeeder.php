@@ -15,10 +15,7 @@ class HeroSeeder extends Seeder
     public function run(): void
     {
         $hero =[
-            'title' => 'Hi, I\'m a passionate Fullstack Developer with a strong
-            foundation in HTML, CSS, JavaScript, TypeScript, React, PHP
-            and Laravel. Eager to collaborate with experts, contribute to
-            success, and enhance abilities.',
+            'title' => 'Hi, I\'m a passionate Fullstack Developer with a strong foundation in HTML, CSS, JavaScript, TypeScript, React, PHP and Laravel. Eager to collaborate with experts, contribute to success, and enhance abilities.',
             'my_cv' => 'file/hero/ProfessionalCVResume.pdf'
         ];
 
