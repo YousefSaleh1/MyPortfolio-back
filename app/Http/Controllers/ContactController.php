@@ -9,8 +9,11 @@ use Illuminate\Http\Request;;
 use App\Http\Resources\ContactResource;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Traits\UploadFileTrait;
+use App\Mail\ReplayContactMail;
+use App\Mail\SendContactMail;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
 {
@@ -39,6 +42,9 @@ class ContactController extends Controller
                 'subject' => $request->subject,
                 'message' => $request->message,
             ]);
+
+            Mail::to('yousefsaleh.888.it@gmail.com')->send(new SendContactMail($contact->message, $contact->name));
+            Mail::to($contact->email)->send(new ReplayContactMail($contact->name));
 
             return $this->customeResponse(new ContactResource($contact), ' Successful', 201);
         } catch (\Throwable $th) {

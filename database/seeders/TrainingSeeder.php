@@ -16,8 +16,7 @@ class TrainingSeeder extends Seeder
         Training::create([
             'training_name'             => 'BackEnd Beginners Cource',
             'company_name'              => 'Focal X Agency',
-            'description'               => 'I worked in and underwent a four-month paid training program at FOCAL X. This is a comprehensive training program that focuses on backend development and provided me with valuable experience in web technologies. During the training, I got practical experience in building API interfaces, in addition to mastering Blade
-            PHP, MySQL, Laravel, in addition to HTML, CSS, and Bootstrap.',
+            'description'               => 'I worked in and underwent a four-month paid training program at FOCAL X. This is a comprehensive training program that focuses on backend development and provided me with valuable experience in web technologies. During the training, I got practical experience in building API interfaces, in addition to mastering Blade PHP, MySQL, Laravel, in addition to HTML, CSS, and Bootstrap.',
             'company_logo'              => 'image/training/111focal_logo.jfif',
             'company_link'              => 'https://www.focal-x.com/',
             'certificate_link'          => 'https://drive.google.com/file/d/1pt6l5ft2oPewdYxAeeIDH4cN7HxwZOKv/view?usp=sharing',

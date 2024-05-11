@@ -18,7 +18,7 @@ class SkillItemResource extends JsonResource
         return [
             'id'    => $this->id,
             'item'  => $this->item,
-            'image' => Storage::url($this->image),
+            'image' => asset(Storage::url($this->image)),
         ];
     }
 }

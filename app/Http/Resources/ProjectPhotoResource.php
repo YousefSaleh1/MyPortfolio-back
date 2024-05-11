@@ -17,7 +17,7 @@ class ProjectPhotoResource extends JsonResource
     {
         return[
             'id'    => $this->id,
-            'photo' => Storage::url($this->photo),
+            'photo' => asset(Storage::url($this->photo)),
         ];
     }
 

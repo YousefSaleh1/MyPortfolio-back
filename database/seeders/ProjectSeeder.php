@@ -16,8 +16,7 @@ class ProjectSeeder extends Seeder
     {
         $project1_model = [
             'title'       => 'VILLA',
-            'description' => 'A specialized website for selling villas.
-            It is characterized by containing many villas with different specifications that meet everyone\'s desires in addition to competitive prices.',
+            'description' => 'A specialized website for selling villas. It is characterized by containing many villas with different specifications that meet everyone\'s desires in addition to competitive prices.',
             'github_link' => 'https://github.com/YousefSaleh1/VILLA.git',
             'demo_link'   => 'https://yousefsaleh1.github.io/VILLA/',
             'published'   => '2024-03-17',

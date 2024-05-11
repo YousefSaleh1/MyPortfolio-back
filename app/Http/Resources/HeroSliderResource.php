@@ -17,7 +17,7 @@ class HeroSliderResource extends JsonResource
     {
         return [
             'id'          => $this->id,
-            'photo_slide' => Storage::url($this->photo_slide),
+            'photo_slide' => asset(Storage::url($this->photo_slide)),
         ];
     }
 }
