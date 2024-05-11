@@ -17,7 +17,8 @@ class HeroSlider extends Model
      */
     protected $fillable = [
         'hero_id',
-        'photo_slide'
+        'photo_slide',
+        'photo_title'
     ];
 
     /**
@@ -28,5 +29,14 @@ class HeroSlider extends Model
     public function hero(): BelongsTo
     {
         return $this->belongsTo(Hero::class, 'hero_id');
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        self::creating(function ($heroSlider) {
+            $heroSlider->hero_id = 1;
+        });
     }
 }

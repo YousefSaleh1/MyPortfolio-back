@@ -15,7 +15,9 @@ class SkillResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            //
+            'id'          => $this->id,
+            'skill_name'  => $this->skill_name,
+            'skill_items' => SkillItemResource::collection($this->skill_items)
         ];
     }
 }

@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Http\Requests\Project\StoreContactRequest;
-use App\Http\Requests\Project\UpdateContactRequest;
+
+use App\Http\Requests\Contact\StoreContactRequest;
+use App\Http\Requests\Contact\UpdateContactRequest;
 use App\Models\Contact;
 use Illuminate\Http\Request;;
 use App\Http\Resources\ContactResource;
@@ -31,14 +32,14 @@ class ContactController extends Controller
     {
         try {
             DB::beginTransaction();
-    
+
             $contact = Contact::create([
-                'name' => $request->name,
-                'email' => $request->email,
+                'name'    => $request->name,
+                'email'   => $request->email,
                 'subject' => $request->subject,
                 'message' => $request->message,
             ]);
-    
+
             return $this->customeResponse(new ContactResource($contact), ' Successful', 201);
         } catch (\Throwable $th) {
             DB::rollBack();
@@ -54,31 +55,6 @@ class ContactController extends Controller
     {
         $data = new ContactResource($contact);
         return $this->customeResponse($data, 'Done!', 200);
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(UpdateContactRequest $request, Contact $contact)
-    {
-        try {
-            DB::beginTransaction();
-
-            $contact->update([
-                'name' => $request->name,
-                'email' => $request->email,
-                'subject' => $request->subject,
-                'message' => $request->message,
-            ]);
-
-            DB::commit();
-
-            return $this->customeResponse(new ContactResource($contact), ' Updated Successfully', 200);
-        } catch (\Throwable $th) {
-            DB::rollBack();
-            Log::error($th);
-            return response()->json(['message' => 'Something Error !'], 500);
-        }
     }
 
     /**
