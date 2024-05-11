@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -20,7 +21,7 @@ class ProjectResource extends JsonResource
             'description' => $this->description,
             'github_link' => $this->github_link,
             'demo_link'   => $this->demo_link,
-            'date'        => $this->date,
+            'published'   => Carbon::parse($this->published)->format('F Y j'),
         ];
     }
 }
