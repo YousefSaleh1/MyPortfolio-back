@@ -16,12 +16,14 @@ class ProjectResource extends JsonResource
     public function toArray(Request $request): array
     {
         return[
-            'id'          => $this->id,
-            'title'       => $this->title,
-            'description' => $this->description,
-            'github_link' => $this->github_link,
-            'demo_link'   => $this->demo_link,
-            'published'   => Carbon::parse($this->published)->format('F Y j'),
+            'id'             => $this->id,
+            'title'          => $this->title,
+            'description'    => $this->description,
+            'github_link'    => $this->github_link,
+            'demo_link'      => $this->demo_link,
+            'published'      => Carbon::parse($this->published)->format('F Y j'),
+            'project_photos' => ProjectPhotoResource::collection($this->project_photos),
+            'skills'         => SkillItemResource::collection($this->skills),
         ];
     }
 }
