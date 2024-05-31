@@ -22,13 +22,13 @@ class StoreTrainingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'training_name'=>'required',
-            'company_name'=>'required',
-            'description'=>'required',
-             'company_logo'=>'required',
-            'company_link'=>'required',
-            'certificate_link'=>'required',
-            'recomendation_letter_link'=>'required',  
-              ];
+            'training_name'             => 'required|string|max:50',
+            'company_name'              => 'required|string|max:24',
+            'description'               => 'required|string',
+            'company_logo'              => 'required|image',
+            'company_link'              => 'required|string|url',
+            'certificate_link'          => 'required|string|url',
+            'recomendation_letter_link' => 'required|string|url',
+        ];
     }
 }

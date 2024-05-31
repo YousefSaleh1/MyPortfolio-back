@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\ContactController;
@@ -22,6 +23,17 @@ use Illuminate\Support\Facades\Route;
 */
 
 /////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////// Auth Requests ////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+Route::post('/login', [AuthController::class, 'login']);
+Route::post('logout', [AuthController::class, 'logout'])->middleware('api');
+
+/////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// End Auth Requests //////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// Project Requests //////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
@@ -29,7 +41,7 @@ Route::get('/projects', [ProjectController::class, 'index']);
 Route::get('/project/{project}', [ProjectController::class, 'show']);
 Route::middleware(['api'])->group(function () {
     Route::post('/projects-create', [ProjectController::class, 'store']);
-    Route::post('/projects/{project}/update', [ProjectController::class, 'update']);
+    Route::put('/projects/{project}/update', [ProjectController::class, 'update']);
     Route::delete('/projects/{project}/delete', [ProjectController::class, 'destroy']);
 });
 
@@ -43,9 +55,9 @@ Route::middleware(['api'])->group(function () {
 
 Route::post('/concats-create', [ContactController::class, 'store']);
 Route::middleware(['api'])->group(function () {
-    Route::get('/concats', [ContactController::class, 'index']);
-    Route::get('/concats/{concat}', [ContactController::class, 'show']);
-    Route::delete('/concats/{concat}/delete', [ContactController::class, 'destroy']);
+    Route::get('/contacts', [ContactController::class, 'index']);
+    Route::get('/contacts/{contact}', [ContactController::class, 'show']);
+    Route::delete('/contacts/{contact}/delete', [ContactController::class, 'destroy']);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -58,8 +70,9 @@ Route::middleware(['api'])->group(function () {
 
 Route::get('/educations', [EducationController::class, 'index']);
 Route::middleware(['api'])->group(function () {
+    Route::get('/education/{education}', [EducationController::class, 'show']);
     Route::post('/educations-create', [EducationController::class, 'store']);
-    Route::post('/educations/{education}/update', [EducationController::class, 'update']);
+    Route::put('/educations/{education}/update', [EducationController::class, 'update']);
     Route::delete('/educations/{education}/delete', [EducationController::class, 'destroy']);
 });
 
@@ -87,7 +100,7 @@ Route::get('/skills', [SkillController::class, 'index']);
 Route::middleware(['api'])->group(function () {
     Route::post('/skills-create', [SkillController::class, 'store']);
     Route::get('/skills/{skill}', [SkillController::class, 'show']);
-    Route::post('/skills/{skill}/update', [SkillController::class, 'update']);
+    Route::put('/skills/{skill}/update', [SkillController::class, 'update']);
     Route::delete('/skills/{skill}/delete', [SkillController::class, 'destroy']);
 });
 
@@ -103,7 +116,7 @@ Route::middleware(['api'])->group(function () {
     Route::get('/skill-items', [SkillItemController::class, 'index']);
     Route::post('/skill-items-create', [SkillItemController::class, 'store']);
     Route::get('/skill-items/{skillItem}', [SkillItemController::class, 'show']);
-    Route::post('/skill-items/{skillItem}/update', [SkillItemController::class, 'update']);
+    Route::put('/skill-items/{skillItem}/update', [SkillItemController::class, 'update']);
     Route::delete('/skill-items/{skillItem}/delete', [SkillItemController::class, 'destroy']);
 });
 
@@ -119,7 +132,7 @@ Route::get('/trainings', [TrainingController::class, 'index']);
 Route::middleware(['api'])->group(function () {
     Route::post('/trainings-create', [TrainingController::class, 'store']);
     Route::get('/trainings/{training}', [TrainingController::class, 'show']);
-    Route::post('/trainings/{training}/update', [TrainingController::class, 'update']);
+    Route::put('/trainings/{training}/update', [TrainingController::class, 'update']);
     Route::delete('/trainings/{training}/delete', [TrainingController::class, 'destroy']);
 });
 

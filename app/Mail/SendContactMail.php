@@ -15,21 +15,25 @@ class SendContactMail extends Mailable
 
     public $content;
     public $client;
+    public $title;
 
     /**
      * Create a new message instance.
      */
-    public function __construct($content, $client)
+    public function __construct($content, $client, $title)
     {
         $this->content = $content;
-        $this->client = $client;
+        $this->client  = $client;
+        $this->title   = $title;
     }
 
     public function build()
     {
-        return $this->subject($this->client .'contacted you in the portfolio')
-                    ->view('emails.send_contact')
-                    ->with(['content' => $this->content]);
+        return $this->subject($this->client . ' contacted you in the portfolio')
+            ->view('emails.send_contact')
+            ->with([
+                'title'   => $this->title,
+                'content' => $this->content,
+            ]);
     }
-
 }

@@ -22,9 +22,9 @@ class UpdateEducationRequest extends FormRequest
     public function rules(): array
     {
         return[
-            'title' => 'nullable|required|string|max:255',
-            'description' => 'nullable|required|string|max:1000',
-            'photo' => 'nullable|required|image|max:2048', 
+            'title'       => 'nullable|string|max:255',
+            'description' => 'nullable|string|max:1000',
+            'photo'       => 'nullable|image|max:2048',
         ];
     }
 }
