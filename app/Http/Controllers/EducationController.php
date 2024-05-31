@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Education\StoreEducationRequest;
+use App\Http\Requests\Education\UpdateEducationRequest;
 use App\Models\Education;
 use Illuminate\Http\Request;;
 
@@ -26,14 +28,14 @@ class EducationController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreEducationRequest $request)
     {
         try {
             //code...
             $education = new Education();
-            $education->title = $request->title;
+            $education->title       = $request->title;
             $education->description = $request->description;
-            $education->photo = $request->photo;
+            $education->photo       = $this->UploadFile($request, 'Education', 'photo', 'image');
 
             $education->save();
 
@@ -57,14 +59,14 @@ class EducationController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Education $education)
+    public function update(UpdateEducationRequest $request, Education $education)
     {
         try {
             //code...
-            $education->title = $request->title;
-            $education->description = $request->description;
-            $education->photo = $request->photo;
-            
+            $education->title       = $request->input('title') ?? $education->title;
+            $education->description = $request->input('description') ?? $education->description;
+            $education->photo       = $this->fileExists($request, 'Educations', 'photo', 'image') ?? $education->photo;
+
             $education->save();
 
             $data = new EducationResource($education);
@@ -81,6 +83,6 @@ class EducationController extends Controller
     public function destroy(Education $education)
     {
         $education->delete();
-        return response()->json(['message' => '{{ Model }} Deleted'], 200);
+        return response()->json(['message' => 'Education Deleted'], 200);
     }
 }

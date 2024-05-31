@@ -26,30 +26,26 @@ class TrainingController extends Controller
         return $this->customeResponse($data, 'Done!', 200);
     }
 
-
-
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(StoreTrainingRequest $request)
     {
         try {
             DB::beginTransaction();
 
-            $trainings = Training::create([
-                'training_name' => $request->training_name,
-                'company_name' => $request->company_name,
-                'description' => $request->description,
-                'company_link' => $request->company_link,
-                'certificate_link' => $request->certificate_link,
-                'company_logo' => $request->company_logo,
+            $training = Training::create([
+                'training_name'             => $request->training_name,
+                'company_name'              => $request->company_name,
+                'description'               => $request->description,
+                'company_link'              => $request->company_link,
+                'certificate_link'          => $request->certificate_link,
+                'company_logo'              => $this->UploadFile($request, 'Training', 'company_logo', 'image'),
                 'recomendation_letter_link' => $request->recomendation_letter_link,
             ]);
 
-            // $this->UploadFile($request,'training','company_logo','image');
-
             DB::commit();
-            return response()->json([
-                'status' => 'success',
-                'training' => $trainings,
-            ]);
+            return $this->customeResponse(new TrainingResource($training), 'Done!', 201);
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th);
@@ -58,11 +54,6 @@ class TrainingController extends Controller
             ], 500);
         }
     }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-
 
     /**
      * Display the specified resource.
@@ -81,28 +72,16 @@ class TrainingController extends Controller
         try {
 
             DB::beginTransaction();
-            $training->update([
-                'training_name' => $request->training_name,
-                'company_name' => $request->company_name,
-                'description' => $request->description,
-                'company_link' => $request->company_link,
-                'certificate_link' => $request->certificate_link,
-                'company_logo' => $request->company_logo,
-                'recomendation_letter_link' => $request->recomendation_letter_link,
-            ]);
+            $training->training_name             = $request->input('training_name') ?? $training->training_name;
+            $training->company_name              = $request->input('company_name') ?? $training->company_name;
+            $training->description               = $request->input('description') ?? $training->description;
+            $training->company_link              = $request->input('company_link') ?? $training->company_link;
+            $training->certificate_link          = $request->input('certificate_link') ?? $training->certificate_link;
+            $training->company_logo              = $this->fileExists($request, 'Training', 'company_logo', 'image') ?? $training->company_logo;
+            $training->recomendation_letter_link = $request->input('recomendation_letter_link') ?? $training->recomendation_letter_link;
 
-            /*if ($request->hasFile('company_logo')) {
-                if ($training->company_logo) {
-                    Storage::delete($training->company_logo);
-                }
-                $path = $request->file('company_logo')->store('image', 'public');
-                $training->update(['company_logo' => $path]);
-            }
             DB::commit();
-            return response()->json([
-                'status' => 'success',
-                'training' => $training,
-            ]);*/
+            return $this->customeResponse(new TrainingResource($training), 'Done!', 200);
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th);
@@ -118,6 +97,6 @@ class TrainingController extends Controller
     public function destroy(Training $training)
     {
         $training->delete();
-        return response()->json(['message' => '{{ Model }} Deleted'], 200);
+        return response()->json(['message' => 'Training Deleted'], 200);
     }
 }

@@ -19,6 +19,7 @@
 </head>
 <body>
     <p class="welcome">Hello,</p>
+    <h3>{{ $title }}</h3>
     <p>{{ $content }}</p>
     <p class="farewell">GoodBy..</p>
 </body>

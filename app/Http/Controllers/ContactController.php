@@ -34,7 +34,6 @@ class ContactController extends Controller
     public function store(StoreContactRequest $request)
     {
         try {
-            DB::beginTransaction();
 
             $contact = Contact::create([
                 'name'    => $request->name,
@@ -42,9 +41,6 @@ class ContactController extends Controller
                 'subject' => $request->subject,
                 'message' => $request->message,
             ]);
-
-            Mail::to('yousefsaleh.888.it@gmail.com')->send(new SendContactMail($contact->message, $contact->name));
-            Mail::to($contact->email)->send(new ReplayContactMail($contact->name));
 
             return $this->customeResponse(new ContactResource($contact), ' Successful', 201);
         } catch (\Throwable $th) {
@@ -69,6 +65,6 @@ class ContactController extends Controller
     public function destroy(Contact $contact)
     {
         $contact->delete();
-        return response()->json(['message' => '{{ Model }} Deleted'], 200);
+        return response()->json(['message' => 'Contact Deleted'], 200);
     }
 }

@@ -22,13 +22,13 @@ class UpdateTrainingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'training_name'=>'required',
-            'company_name'=>'required',
-            'description'=>'required',
-             'company_logo'=>'required',
-            'company_link'=>'required',
-            'certificate_link'=>'required',
-            'recomendation_letter_link'=>'required',  
+            'training_name'             => 'nullable|string|max:50',
+            'company_name'              => 'nullable|string|max:24',
+            'description'               => 'nullable|string',
+            'company_logo'              => 'nullable|image',
+            'company_link'              => 'nullable|string|url',
+            'certificate_link'          => 'nullable|string|url',
+            'recomendation_letter_link' => 'nullable|string|url',
               ];
     }
 }
