@@ -6,6 +6,7 @@ use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\HeroController;
+use App\Http\Controllers\ProjectPhotoController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\SkillItemController;
 use Illuminate\Http\Request;
@@ -134,6 +135,17 @@ Route::middleware(['api'])->group(function () {
     Route::get('/trainings/{training}', [TrainingController::class, 'show']);
     Route::put('/trainings/{training}/update', [TrainingController::class, 'update']);
     Route::delete('/trainings/{training}/delete', [TrainingController::class, 'destroy']);
+});
+
+
+
+
+Route::get('/project-photos', [ProjectPhotoController::class, 'index']);
+Route::get('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'show']);
+Route::middleware(['api'])->group(function () {
+    Route::post('/project-photo', [ProjectPhotoController::class, 'store']);
+Route::post('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'update']);
+Route::delete('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'destroy']);
 });
 
 /////////////////////////////////////////////////////////////////////////////////////
