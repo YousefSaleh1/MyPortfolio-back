@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Hero\UpdateHeroRequest;
 use App\Models\Hero;
 use Illuminate\Http\Request;;
 
@@ -27,10 +28,14 @@ class HeroController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Hero $hero)
+    public function update(UpdateHeroRequest $request)
     {
         try {
-            //code...
+            $hero = Hero::first();
+            $hero->title = $request->input('title') ?? $hero->title;
+            $hero->my_cv = $this->fileExists($request, 'hero', 'my_cv', 'file') ?? $hero->my_cv;
+
+            $hero->save();
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['message' => 'Something Error !'], 500);
@@ -39,7 +44,7 @@ class HeroController extends Controller
 
     public function downloadCV()
     {
-        $my_cv = Hero::first()->my_cv ;
+        $my_cv = Hero::first()->my_cv;
         $path = storage_path('app\public\\' . $my_cv);
         return response()->download($path);
     }
