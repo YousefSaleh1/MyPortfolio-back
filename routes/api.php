@@ -54,7 +54,7 @@ Route::middleware(['api'])->group(function () {
 ///////////////////////////////// Contact Requests //////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
-Route::post('/concats-create', [ContactController::class, 'store']);
+Route::post('/contacts-create', [ContactController::class, 'store']);
 Route::middleware(['api'])->group(function () {
     Route::get('/contacts', [ContactController::class, 'index']);
     Route::get('/contacts/{contact}', [ContactController::class, 'show']);
@@ -137,17 +137,17 @@ Route::middleware(['api'])->group(function () {
     Route::delete('/trainings/{training}/delete', [TrainingController::class, 'destroy']);
 });
 
-
-
-
-Route::get('/project-photos', [ProjectPhotoController::class, 'index']);
-Route::get('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'show']);
-Route::middleware(['api'])->group(function () {
-    Route::post('/project-photo', [ProjectPhotoController::class, 'store']);
-Route::post('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'update']);
-Route::delete('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'destroy']);
-});
-
 /////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// End Training Requests //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
+
+
+
+Route::middleware(['api'])->group(function () {
+    Route::get('/project-photos/{project}', [ProjectPhotoController::class, 'index']);
+    Route::get('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'show']);
+    Route::post('/project-photo', [ProjectPhotoController::class, 'store']);
+    Route::put('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'update']);
+    Route::delete('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'destroy']);
+});
+

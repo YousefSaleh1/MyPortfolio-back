@@ -7,6 +7,7 @@ use App\Http\Requests\ProjectPhoto\UpdateProjectPhotoRequest;
 use App\Http\Resources\ProjectPhotoResource;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Traits\UploadFileTrait;
+use App\Models\Project;
 use App\Models\ProjectPhoto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -18,9 +19,9 @@ class ProjectPhotoController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Project $project)
     {
-        $projectPhotos = ProjectPhoto::all();
+        $projectPhotos = $project->project_photos;
         $data = ProjectPhotoResource::collection($projectPhotos);
         return $this->customeResponse($data, 'projectPhoto Retrieved Successfully', 200);
     }
@@ -33,7 +34,7 @@ class ProjectPhotoController extends Controller
         try {
             DB::beginTransaction();
 
-            $path = $this->UploadFile($request, 'project_photos', 'photo', 'public');
+            $path = $this->UploadFile($request, 'projectPhotos', 'photo', 'image');
 
 
             $projectPhoto = ProjectPhoto::create([
@@ -69,12 +70,10 @@ class ProjectPhotoController extends Controller
         try {
             DB::beginTransaction();
 
-            $path = $this->UploadFile($request, 'project_photos', 'photo', 'public');
+            $projectPhoto->project_id = $request->input('project_id') ?? $projectPhoto->project_id;
+            $projectPhoto->photo       = $this->fileExists($request, 'projectPhotos', 'photo', 'image') ?? $projectPhoto->photo;
 
-            $projectPhoto->update([
-                'project_id' => $request->project_id,
-                'photo' => $path,
-            ]);
+            $projectPhoto->save();
 
             DB::commit();
             $data = new ProjectPhotoResource($projectPhoto);

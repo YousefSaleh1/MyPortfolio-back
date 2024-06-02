@@ -22,8 +22,8 @@ class UpdateProjectPhotoRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'project_id' => 'required|integer|exists:projects,id',
-            'photo' => 'required|image|max:2048|mimes:jpg,jpeg,png,gif,svg',
+            'project_id' => 'nullable|integer|exists:projects,id',
+            'photo'      => 'nullable|image|max:2048|mimes:jpg,jpeg,png,gif,svg',
         ];
     }
 }
