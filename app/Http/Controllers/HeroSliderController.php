@@ -31,7 +31,7 @@ class HeroSliderController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreHeroSliderRequest $request)
+    public function store(Request $request)
     {
         try {
             $path = $this->UploadFile($request, 'heroSliders', 'photo_slide');

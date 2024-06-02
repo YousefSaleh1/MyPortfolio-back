@@ -50,7 +50,7 @@ class HeroController extends Controller
 
     public function downloadCV()
     {
-        $my_cv = Hero::first()->my_cv ;
+        $my_cv = Hero::first()->my_cv;
         $path = storage_path('app\public\\' . $my_cv);
         return response()->download($path);
     }
