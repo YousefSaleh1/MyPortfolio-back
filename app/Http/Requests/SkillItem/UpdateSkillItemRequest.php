@@ -22,7 +22,8 @@ class UpdateSkillItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'item'    => 'required|string|max:50',
+            'image' => 'required|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
         ];
     }
 }
