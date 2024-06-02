@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Hero;
+namespace App\Http\Requests\HeroSlider;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateHeroRequest extends FormRequest
+class UpdateHeroSliderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +22,8 @@ class UpdateHeroRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'nullable|string|max:255',
-            'my_cv' => 'nullable|file|mimes:pdf,doc,docx|max:2048'
+            'photo_title' => 'nullable|string|max:10',
+            'photo_slide' => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048'
         ];
     }
 }
