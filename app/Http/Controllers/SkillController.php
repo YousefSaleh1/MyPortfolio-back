@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Skill\StoreSkillRequest;
+use App\Http\Requests\Skill\UpdateSkillRequest;
 use App\Models\Skill;
 use Illuminate\Http\Request;;
 use App\Http\Resources\SkillResource;
@@ -25,10 +27,14 @@ class SkillController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreSkillRequest $request)
     {
         try {
-            //code...
+            $skill = Skill::create([
+                'name' => $request->name
+            ]);
+            $skill_data =new SkillResource($skill);
+            return $this->customeResponse($skill_data , 'skill successfully stored',200);
         } catch (\Throwable $th) {
             Log::error($th);
             return $this->customeResponse(null, 'Failed To Create', 500);
@@ -47,10 +53,13 @@ class SkillController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Skill $skill)
+    public function update(UpdateSkillRequest $request, Skill $skill)
     {
         try {
-            //code...
+            $skill->name =$request->input('name') ?? $skill->name ;
+            $skill->save();
+            $skill_data =new SkillResource($skill);
+            return $this->customeResponse($skill_data , 'skill successfully updated',200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['message' => 'Something Error !'], 500);

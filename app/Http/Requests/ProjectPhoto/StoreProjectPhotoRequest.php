@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\SkillItem;
+namespace App\Http\Requests\ProjectPhoto;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreSkillItemRequest extends FormRequest
+class StoreProjectPhotoRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,8 @@ class StoreSkillItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'skill_id' => 'required|exists:skills,id',
-            'item'    => 'required|string|max:50',
-            'image' => 'required|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
+            'project_id' => 'required|integer|exists:projects,id',
+            'photo' => 'required|image|max:2048|mimes:jpg,jpeg,png,gif,svg',
         ];
     }
 }
