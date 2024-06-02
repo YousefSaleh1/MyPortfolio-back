@@ -22,7 +22,9 @@ class StoreSkillItemRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'skill_id' => 'required|exists:skills,id',
+            'item'    => 'required|string|max:50',
+            'image' => 'required|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
         ];
     }
 }

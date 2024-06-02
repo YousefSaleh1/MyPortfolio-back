@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SkillItem\StoreSkillItemRequest;
+use App\Http\Requests\SkillItem\UpdateSkillItemRequest;
 use App\Models\SkillItem;
 use Illuminate\Http\Request;;
 use App\Http\Resources\SkillItemResource;
@@ -11,7 +13,7 @@ use Illuminate\Support\Facades\Log;
 
 class SkillItemController extends Controller
 {
-    use ApiResponseTrait, UploadFileTrait;
+    use ApiResponseTrait , UploadFileTrait;
     /**
      * Display a listing of the resource.
      */
@@ -25,10 +27,16 @@ class SkillItemController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreSkillItemRequest $request)
     {
         try {
-            //code...
+            $skill_item = SkillItem::create([
+                'skill_id' => $request->skill_id,
+                'item'=>$request->item,
+                'image'=>$this->UploadFile($request->image,'skillItem','image', 'image'),
+            ]);
+            $skill_item_data = new SkillItemResource($skill_item);
+            return $this->customeResponse($skill_item_data, 'Item Successfully Stored', 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return $this->customeResponse(null, 'Failed To Create', 500);
@@ -47,10 +55,17 @@ class SkillItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, SkillItem $skillItem)
+    public function update(UpdateSkillItemRequest $request, SkillItem $skillItem)
     {
         try {
-            //code...
+            $skillItem->item = $request->input('item') ?? $skillItem->item;
+            if($request->input('image'))
+            {
+                $skillItem->image =$this->UploadFile($request->image,'skillItem','image', 'image');
+            }
+            $skillItem->save();
+            $skill_item_data = new SkillItemResource($skillItem);
+            return $this->customeResponse($skill_item_data, 'Item Successfully Updated', 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['message' => 'Something Error !'], 500);
