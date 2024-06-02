@@ -11,6 +11,7 @@ use Illuminate\Http\Request;;
 use App\Http\Resources\ProjectResource;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Traits\UploadFileTrait;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -22,7 +23,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::all();
+        $projects = Cache::remember('projects', 180, function () {
+            return Project::all();
+        });
         $data = ProjectResource::collection($projects);
         return $this->customeResponse($data, 'Projects Retrieved Successfully', 200);
     }

@@ -6,6 +6,7 @@ use App\Http\Controllers\TrainingController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\EducationController;
 use App\Http\Controllers\HeroController;
+use App\Http\Controllers\HeroSliderController;
 use App\Http\Controllers\ProjectPhotoController;
 use App\Http\Controllers\SkillController;
 use App\Http\Controllers\SkillItemController;
@@ -51,6 +52,22 @@ Route::middleware(['api'])->group(function () {
 /////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////// ProjectPhoto Requests //////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+Route::middleware(['api'])->group(function () {
+    Route::get('/project-photos/{project}', [ProjectPhotoController::class, 'index']);
+    Route::get('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'show']);
+    Route::post('/project-photo', [ProjectPhotoController::class, 'store']);
+    Route::put('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'update']);
+    Route::delete('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'destroy']);
+});
+
+/////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////// End ProjectPhoto Requests ////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////// Contact Requests //////////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
@@ -87,10 +104,26 @@ Route::middleware(['api'])->group(function () {
 
 Route::get('/hero', [HeroController::class, 'show']);
 Route::get('/download-cv', [HeroController::class, 'downloadCV']);
-Route::post('/hero/{hero}/update', [HeroController::class, 'update'])->middleware('api');
+Route::post('/hero-update', [HeroController::class, 'update'])->middleware('api');
 
 /////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////// End Hero Requests ////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////// Hero Slider Requests //////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////
+
+Route::middleware(['api'])->group(function () {
+    Route::get('/hero-sliders', [HeroSliderController::class, 'index']);
+    Route::get('/hero-sliders/{heroSlider}', [HeroSliderController::class, 'show']);
+    Route::post('/hero-slider', [HeroSliderController::class, 'store']);
+    Route::put('/hero-sliders/{heroSlider}', [HeroSliderController::class, 'update']);
+    Route::delete('/hero-sliders/{heroSlider}', [HeroSliderController::class, 'destroy']);
+});
+
+/////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////// End Hero Slider Requests ////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -99,8 +132,8 @@ Route::post('/hero/{hero}/update', [HeroController::class, 'update'])->middlewar
 
 Route::get('/skills', [SkillController::class, 'index']);
 Route::middleware(['api'])->group(function () {
-    Route::post('/skills-create', [SkillController::class, 'store']);
     Route::get('/skills/{skill}', [SkillController::class, 'show']);
+    Route::post('/skills-create', [SkillController::class, 'store']);
     Route::put('/skills/{skill}/update', [SkillController::class, 'update']);
     Route::delete('/skills/{skill}/delete', [SkillController::class, 'destroy']);
 });
@@ -140,14 +173,3 @@ Route::middleware(['api'])->group(function () {
 /////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////// End Training Requests //////////////////////////////
 /////////////////////////////////////////////////////////////////////////////////////
-
-
-
-Route::middleware(['api'])->group(function () {
-    Route::get('/project-photos/{project}', [ProjectPhotoController::class, 'index']);
-    Route::get('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'show']);
-    Route::post('/project-photo', [ProjectPhotoController::class, 'store']);
-    Route::put('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'update']);
-    Route::delete('/project-photos/{projectPhoto}', [ProjectPhotoController::class, 'destroy']);
-});
-

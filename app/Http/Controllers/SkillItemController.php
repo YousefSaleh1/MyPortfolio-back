@@ -9,6 +9,7 @@ use Illuminate\Http\Request;;
 use App\Http\Resources\SkillItemResource;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Traits\UploadFileTrait;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class SkillItemController extends Controller
@@ -19,7 +20,10 @@ class SkillItemController extends Controller
      */
     public function index()
     {
-        $skillItems = SkillItem::all();
+        $skillItems = Cache::remember('skillItems', 180, function () {
+            return SkillItem::all();
+        });
+
         $data = SkillItemResource::collection($skillItems);
         return $this->customeResponse($data, 'Done!', 200);
     }
@@ -33,7 +37,7 @@ class SkillItemController extends Controller
             $skill_item = SkillItem::create([
                 'skill_id' => $request->skill_id,
                 'item'=>$request->item,
-                'image'=>$this->UploadFile($request->image,'skillItem','image', 'image'),
+                'image'=>$this->UploadFile($request,'skillItem','image'),
             ]);
             $skill_item_data = new SkillItemResource($skill_item);
             return $this->customeResponse($skill_item_data, 'Item Successfully Stored', 200);
@@ -58,10 +62,11 @@ class SkillItemController extends Controller
     public function update(UpdateSkillItemRequest $request, SkillItem $skillItem)
     {
         try {
-            $skillItem->item = $request->input('item') ?? $skillItem->item;
+            $skillItem->skill_id = $request->input('skill_id') ?? $skillItem->skill_id;
+            $skillItem->item     = $request->input('item') ?? $skillItem->item;
             if($request->input('image'))
             {
-                $skillItem->image =$this->UploadFile($request->image,'skillItem','image', 'image');
+                $skillItem->image =$this->UploadFile($request,'skillItem','image');
             }
             $skillItem->save();
             $skill_item_data = new SkillItemResource($skillItem);
@@ -78,6 +83,6 @@ class SkillItemController extends Controller
     public function destroy(SkillItem $skillItem)
     {
         $skillItem->delete();
-        return response()->json(['message' => '{{ Model }} Deleted'], 200);
+        return response()->json(['message' => 'SkillItem Deleted'], 200);
     }
 }

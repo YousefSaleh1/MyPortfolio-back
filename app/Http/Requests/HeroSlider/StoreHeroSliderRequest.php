@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Education;
+namespace App\Http\Requests\HeroSlider;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreEducationRequest extends FormRequest
+class StoreHeroSliderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,8 @@ class StoreEducationRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => 'required|string|max:255',
-            'description' => 'required|string|max:1000',
-            'photo'       => 'required|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
+            'photo_title' => 'required|string|max:25',
+            'photo_slide' => 'required|image|mimes:png,jpg,jpeg,gif,sug|max:2048'
         ];
     }
 }

@@ -22,7 +22,8 @@ class UpdateHeroRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => 'nullable|string',
+            'my_cv' => 'nullable|file|mimes:pdf,doc,docx|max:2048'
         ];
     }
 }

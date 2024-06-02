@@ -24,7 +24,7 @@ class UpdateEducationRequest extends FormRequest
         return[
             'title'       => 'nullable|string|max:255',
             'description' => 'nullable|string|max:1000',
-            'photo'       => 'nullable|image|max:2048',
+            'photo'       => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
         ];
     }
 }

@@ -34,7 +34,7 @@ class ProjectPhotoController extends Controller
         try {
             DB::beginTransaction();
 
-            $path = $this->UploadFile($request, 'projectPhotos', 'photo', 'image');
+            $path = $this->UploadFile($request, 'projectPhotos', 'photo');
 
 
             $projectPhoto = ProjectPhoto::create([
@@ -71,7 +71,7 @@ class ProjectPhotoController extends Controller
             DB::beginTransaction();
 
             $projectPhoto->project_id = $request->input('project_id') ?? $projectPhoto->project_id;
-            $projectPhoto->photo       = $this->fileExists($request, 'projectPhotos', 'photo', 'image') ?? $projectPhoto->photo;
+            $projectPhoto->photo       = $this->fileExists($request, 'projectPhotos', 'photo') ?? $projectPhoto->photo;
 
             $projectPhoto->save();
 
