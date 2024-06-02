@@ -24,7 +24,7 @@ class StoreEducationRequest extends FormRequest
         return [
             'title'       => 'required|string|max:255',
             'description' => 'required|string|max:1000',
-            'photo'       => 'required|image|max:2048',
+            'photo'       => 'required|image|mimes:png,jpg,jpeg,gif,sug|max:2048',
         ];
     }
 }

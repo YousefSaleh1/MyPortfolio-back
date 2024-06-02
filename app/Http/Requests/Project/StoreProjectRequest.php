@@ -26,9 +26,7 @@ class StoreProjectRequest extends FormRequest
             'description' => 'required|string|min:10|max:500',
             'github_link' => 'required|url|active_url',
             'demo_link' => 'required|url|active_url',
-            'date' => 'required|date|after_or_equal:today',
-            'photo' => 'required|image|max:2048|mimes:jpg,jpeg,png,gif,svg',
-
+            'published' => 'required|date|before_or_equal:today',
         ];
     }
 }

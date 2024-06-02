@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 trait UploadFileTrait
 {
 
-    public function UploadFile(Request $request, $folderName, $fileName, $disk)
+    public function UploadFile(Request $request, $folderName, $fileName)
     {
         $file = time() . '.' . $request->file($fileName)->getClientOriginalName();
-        $path = $request->file($fileName)->storeAs($folderName, $file, $disk);
+        $path = $request->file($fileName)->storeAs($folderName, $file, 'public');
         return $path;
     }
 
@@ -26,12 +26,12 @@ trait UploadFileTrait
      * @param  string  $fileColumnName The name of the file input field in the request.
      * @return string|null The file path if the file exists, otherwise null.
      */
-    public function fileExists(Request $request, string $folder, string $fileColumnName, $disk)
+    public function fileExists(Request $request, string $folder, string $fileColumnName)
     {
         if (empty($request->file($fileColumnName))) {
             return null;
         }
-        return $this->uploadFile($request, $folder, $fileColumnName, $disk);
+        return $this->uploadFile($request, $folder, $fileColumnName);
     }
 
 }

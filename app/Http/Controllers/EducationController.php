@@ -10,6 +10,7 @@ use Illuminate\Http\Request;;
 use App\Http\Resources\EducationResource;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Traits\UploadFileTrait;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class EducationController extends Controller
@@ -20,7 +21,9 @@ class EducationController extends Controller
      */
     public function index()
     {
-        $educations = Education::all();
+        $educations = Cache::remember('educations', 180, function () {
+            return Education::all();
+        });
         $data = EducationResource::collection($educations);
         return $this->customeResponse($data, 'Done!', 200);
     }
@@ -35,7 +38,7 @@ class EducationController extends Controller
             $education = new Education();
             $education->title       = $request->title;
             $education->description = $request->description;
-            $education->photo       = $this->UploadFile($request, 'Education', 'photo', 'image');
+            $education->photo       = $this->UploadFile($request, 'Education', 'photo');
 
             $education->save();
 
@@ -65,7 +68,7 @@ class EducationController extends Controller
             //code...
             $education->title       = $request->input('title') ?? $education->title;
             $education->description = $request->input('description') ?? $education->description;
-            $education->photo       = $this->fileExists($request, 'Educations', 'photo', 'image') ?? $education->photo;
+            $education->photo       = $this->fileExists($request, 'Educations', 'photo') ?? $education->photo;
 
             $education->save();
 

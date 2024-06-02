@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\HeroSlider\StoreHeroSliderRequest;
 use App\Http\Requests\HeroSlider\UpdateHeroSliderRequest;
 use App\Http\Resources\HeroSliderResource;
 use App\Http\Traits\ApiResponseTrait;
@@ -33,15 +34,12 @@ class HeroSliderController extends Controller
     public function store(Request $request)
     {
         try {
-
-            $path = $this->UploadFile($request, 'heroSliders', 'photo_slide', 'image');
-
+            $path = $this->UploadFile($request, 'heroSliders', 'photo_slide');
 
             $hero_slider = HeroSlider::create([
                 'photo_title' => $request->photo_title,
                 'photo_slide' => $path,
             ]);
-
 
             $data = new HeroSliderResource($hero_slider);
             return $this->customeResponse($data, 'Created Successfully', 201);
@@ -66,9 +64,8 @@ class HeroSliderController extends Controller
     public function update(UpdateHeroSliderRequest $request, HeroSlider $heroSlider)
     {
         try {
-
             $heroSlider->photo_title = $request->input('photo_title') ?? $heroSlider->photo_title;
-            $heroSlider->photo_slide = $this->fileExists($request, 'heroSliders', 'photo_slide', 'image') ?? $heroSlider->photo_slide;
+            $heroSlider->photo_slide = $this->fileExists($request, 'heroSliders', 'photo_slide') ?? $heroSlider->photo_slide;
 
             $heroSlider->save();
 
@@ -86,6 +83,6 @@ class HeroSliderController extends Controller
     public function destroy(HeroSlider $heroSlider)
     {
         $heroSlider->delete();
-        return $this->customeResponse(null, 'projectPhoto deleted successfully', 200);
+        return $this->customeResponse(null, 'HeroSlider deleted successfully', 200);
     }
 }

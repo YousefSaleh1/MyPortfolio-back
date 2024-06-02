@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Http\Resources\TrainingResource;
 use App\Http\Requests\Training\StoreTrainingRequest;
 use App\Http\Requests\Training\UpdateTrainingRequest;
+use Illuminate\Support\Facades\Cache;
 
 class TrainingController extends Controller
 {
@@ -21,7 +22,10 @@ class TrainingController extends Controller
      */
     public function index()
     {
-        $trainings = Training::all();
+        $trainings = Cache::remember('trainings', 180, function () {
+            return Training::all();
+        });
+
         $data = TrainingResource::collection($trainings);
         return $this->customeResponse($data, 'Done!', 200);
     }
@@ -40,7 +44,7 @@ class TrainingController extends Controller
                 'description'               => $request->description,
                 'company_link'              => $request->company_link,
                 'certificate_link'          => $request->certificate_link,
-                'company_logo'              => $this->UploadFile($request, 'Training', 'company_logo', 'image'),
+                'company_logo'              => $this->UploadFile($request, 'Training', 'company_logo'),
                 'recomendation_letter_link' => $request->recomendation_letter_link,
             ]);
 
@@ -77,7 +81,7 @@ class TrainingController extends Controller
             $training->description               = $request->input('description') ?? $training->description;
             $training->company_link              = $request->input('company_link') ?? $training->company_link;
             $training->certificate_link          = $request->input('certificate_link') ?? $training->certificate_link;
-            $training->company_logo              = $this->fileExists($request, 'Training', 'company_logo', 'image') ?? $training->company_logo;
+            $training->company_logo              = $this->fileExists($request, 'Training', 'company_logo') ?? $training->company_logo;
             $training->recomendation_letter_link = $request->input('recomendation_letter_link') ?? $training->recomendation_letter_link;
 
             DB::commit();

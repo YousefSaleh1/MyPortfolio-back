@@ -9,6 +9,7 @@ use Illuminate\Http\Request;;
 use App\Http\Resources\SkillResource;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Traits\UploadFileTrait;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class SkillController extends Controller
@@ -19,7 +20,10 @@ class SkillController extends Controller
      */
     public function index()
     {
-        $skills = Skill::all();
+        $skills = Cache::remember('skills', 180, function () {
+            return Skill::all();
+        });
+
         $data = SkillResource::collection($skills);
         return $this->customeResponse($data, 'Done!', 200);
     }
@@ -31,7 +35,7 @@ class SkillController extends Controller
     {
         try {
             $skill = Skill::create([
-                'name' => $request->name
+                'skill_name' => $request->skill_name
             ]);
             $skill_data =new SkillResource($skill);
             return $this->customeResponse($skill_data , 'skill successfully stored',200);
@@ -56,7 +60,7 @@ class SkillController extends Controller
     public function update(UpdateSkillRequest $request, Skill $skill)
     {
         try {
-            $skill->name =$request->input('name') ?? $skill->name ;
+            $skill->skill_name =$request->input('skill_name') ?? $skill->skill_name ;
             $skill->save();
             $skill_data =new SkillResource($skill);
             return $this->customeResponse($skill_data , 'skill successfully updated',200);
@@ -72,6 +76,6 @@ class SkillController extends Controller
     public function destroy(Skill $skill)
     {
         $skill->delete();
-        return response()->json(['message' => '{{ Model }} Deleted'], 200);
+        return response()->json(['message' => 'Skill Deleted'], 200);
     }
 }

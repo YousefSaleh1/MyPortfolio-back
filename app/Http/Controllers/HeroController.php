@@ -9,6 +9,7 @@ use Illuminate\Http\Request;;
 use App\Http\Resources\HeroResource;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Traits\UploadFileTrait;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
 
 class HeroController extends Controller
@@ -20,7 +21,9 @@ class HeroController extends Controller
      */
     public function show()
     {
-        $hero = Hero::first();
+        $hero = Cache::remember('hero', 180, function () {
+            return Hero::first();
+        });
         $data = new HeroResource($hero);
         return $this->customeResponse($data, 'Done!', 200);
     }
@@ -33,9 +36,12 @@ class HeroController extends Controller
         try {
             $hero = Hero::first();
             $hero->title = $request->input('title') ?? $hero->title;
-            $hero->my_cv = $this->fileExists($request, 'hero', 'my_cv', 'file') ?? $hero->my_cv;
+            $hero->my_cv = $this->fileExists($request, 'hero', 'my_cv') ?? $hero->my_cv;
 
             $hero->save();
+
+            $data = new HeroResource($hero);
+            return $this->customeResponse($data, 'Hero Updated Successfully', 200);
         } catch (\Throwable $th) {
             Log::error($th);
             return response()->json(['message' => 'Something Error !'], 500);

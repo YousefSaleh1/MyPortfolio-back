@@ -11,7 +11,7 @@ use Illuminate\Http\Request;;
 use App\Http\Resources\ProjectResource;
 use App\Http\Traits\ApiResponseTrait;
 use App\Http\Traits\UploadFileTrait;
-use App\Models\ProjectPhoto;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -23,7 +23,9 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::all();
+        $projects = Cache::remember('projects', 180, function () {
+            return Project::all();
+        });
         $data = ProjectResource::collection($projects);
         return $this->customeResponse($data, 'Projects Retrieved Successfully', 200);
     }
@@ -41,15 +43,8 @@ class ProjectController extends Controller
                 'description' => $request->description,
                 'github_link' => $request->github_link,
                 'demo_link' => $request->demo_link,
-                'date' => $request->date,
+                'published' => $request->published,
             ]);
-
-            $path = $this->UploadFile($request, 'projects', 'photo', 'public');
-            $projectPhoto = new ProjectPhoto([
-                'project_id' => $project->id,
-                'photo' => $path,
-            ]);
-            $projectPhoto->save();
 
             DB::commit();
 
@@ -79,22 +74,13 @@ class ProjectController extends Controller
         try {
             DB::beginTransaction();
 
-            $project->update([
-                'title' => $request->title,
-                'description' => $request->description,
-                'github_link' => $request->github_link,
-                'demo_link' => $request->demo_link,
-                'date' => $request->date,
-            ]);
+            $project->title       = $request->input('title') ?? $project->title;
+            $project->description = $request->input('description') ?? $project->description;
+            $project->github_link = $request->input('github_link') ?? $project->github_link;
+            $project->demo_link   = $request->input('demo_link') ?? $project->demo_link;
+            $project->published   = $request->input('published') ?? $project->published;
 
-            if ($request->hasFile('photo')) {
-                $path = $this->UploadFile($request, 'projects', 'photo', 'public');
-                $projectPhoto = new ProjectPhoto([
-                    'project_id' => $project->id,
-                    'photo' => $path,
-                ]);
-                $projectPhoto->save();
-            }
+            $project->save();
 
             DB::commit();
 

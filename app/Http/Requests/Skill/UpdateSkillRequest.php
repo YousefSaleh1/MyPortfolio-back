@@ -22,7 +22,7 @@ class UpdateSkillRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'    => 'required|string|max:50',
+            'skill_name'    => 'nullable|string|max:50',
         ];
     }
 }

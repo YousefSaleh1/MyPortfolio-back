@@ -22,7 +22,7 @@ class StoreHeroSliderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photo_title' => 'required|string|max:10',
+            'photo_title' => 'required|string|max:25',
             'photo_slide' => 'required|image|mimes:png,jpg,jpeg,gif,sug|max:2048'
         ];
     }

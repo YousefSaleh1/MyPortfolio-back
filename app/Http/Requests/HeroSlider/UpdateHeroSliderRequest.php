@@ -22,7 +22,7 @@ class UpdateHeroSliderRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'photo_title' => 'nullable|string|max:10',
+            'photo_title' => 'nullable|string|max:25',
             'photo_slide' => 'nullable|image|mimes:png,jpg,jpeg,gif,sug|max:2048'
         ];
     }
